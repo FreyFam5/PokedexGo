@@ -8,10 +8,11 @@ import (
 	"strings"
 )
 
+var mapPrefix string = "https://pokeapi.co/api/v2/location-area/"
 
 func commandMap(c *Config) error {
-	if !strings.HasPrefix(c.Next, "https://pokeapi.co/api/v2/location-area/") {
-		c.Next = "https://pokeapi.co/api/v2/location-area/"
+	if !strings.HasPrefix(c.Next, mapPrefix) {
+		c.Next = mapPrefix
 	}
 
 	res, err := http.Get(c.Next)
@@ -19,6 +20,10 @@ func commandMap(c *Config) error {
 		return err
 	}
 	defer res.Body.Close()
+
+	c.Previous = c.Next
+	c.Offset += 20
+	c.Next = mapPrefix + fmt.Sprintf("?offset%d", c.Offset)
 
 	body, err := io.ReadAll(res.Body)
 	if res.StatusCode > 299 {
@@ -39,6 +44,7 @@ func commandMap(c *Config) error {
 	for idx := range c.Results {
 		fmt.Println(c.Results[idx].Name)
 	}
+
 
 	return nil
 }

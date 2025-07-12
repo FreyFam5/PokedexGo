@@ -43,10 +43,11 @@ type NamedAPIResource struct {
 }
 
 type Config struct {
-	Count 		int
-	Next 			string
-	Previous 	string
-	Results 	[]NamedAPIResource
+	Count 		int     						`json:"count"`
+	Offset 		int	// The offset used in the map commands to push the next 20 areas
+	Next 			string							`json:"next"`
+	Previous 	string							`json:"previous"`
+	Results 	[]NamedAPIResource	`json:"results"`
 }
 
 type cliCommand struct {
