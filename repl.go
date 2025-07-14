@@ -15,12 +15,16 @@ func startRepl() {
 
 		scanner.Scan() // Pushes the scan to await next input
 
-		input := scanner.Text()      // The text found in the scan
-		input = cleanInput(input)[0] // Cleans the input
-
+		input := scanner.Text()     // The text found in the scan
+		inputs := cleanInput(input) // Cleans the input
+		input = inputs[0]
+		arg := ""
+		if len(inputs) > 1 {
+			arg = inputs[1]
+		}
 		command, exists := commands[input] // Finds the command if it exists
 		if exists {
-			if err := command.callback(&presetConfig); err != nil { // If it doesn't exist, will print error and skip to next input
+			if err := command.callback(&presetConfig, arg); err != nil { // If it doesn't exist, will print error and skip to next input
 				fmt.Println(err)
 			}
 			continue
@@ -52,7 +56,7 @@ type config struct {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, string) error
 }
 
 var commands = map[string]cliCommand{}
@@ -74,6 +78,21 @@ func init() {
 			name:        "mapb",
 			description: "Displays the names of the 20 previous areas in Pokemon, each subsequent call will display the next 20 until reaching the first 20, in which it will stop",
 			callback:    commandMapB,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Shows the pokemon that are in the given area or area id, ex. Pokedex > explore pastoria-city-area",
+			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Attempt to catch the given pokemon, ex. Pokedex > catch pikachu",
+			callback:    commandCatch,
+		},
+		"inspect": {
+			name:        "inspect",
+			description: "Inspect a cuaght pokemons stats, ex. Pokedex > inspect pikachu",
+			callback:    commandInspect,
 		},
 		"exit": {
 			name:        "exit",

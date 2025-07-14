@@ -10,17 +10,17 @@ import (
 	"github.com/FreyFam5/go/pokedexcli/internal/pokecache"
 )
 
-var mapPrefix string = "https://pokeapi.co/api/v2/location-area/"
-var cache = pokecache.NewCache(5 * time.Second)
+const mapPrefix string = "https://pokeapi.co/api/v2/location-area/"
+
+var cache = pokecache.NewCache(5 * time.Minute)
 
 // Cycles the map display forward
-func commandMap(c *config) error {
+func commandMap(c *config, arg string) error {
 	if c.Next == "" {
 		c.Next = mapPrefix
 	}
 
 	body, err := getBodyWithCache(c.Next)
-	fmt.Printf("This is the body: %v", body)
 	if err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func commandMap(c *config) error {
 }
 
 // Cycles the map display backwards
-func commandMapB(c *config) error {
+func commandMapB(c *config, areaName string) error {
 	if c.Previous == nil {
 		fmt.Println("you're on the first page")
 		return nil
