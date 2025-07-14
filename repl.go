@@ -94,6 +94,11 @@ func init() {
 			description: "Inspect a cuaght pokemons stats, ex. Pokedex > inspect pikachu",
 			callback:    commandInspect,
 		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Shows all the pokemon you've caught so far",
+			callback:    commandPokedex,
+		},
 		"exit": {
 			name:        "exit",
 			description: "Exit the Pokedex",
